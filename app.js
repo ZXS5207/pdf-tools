@@ -532,7 +532,7 @@ const convertModule = {
 
         try {
             let downloadingText = this.downloadAllBtn.innerHTML;
-            this.downloadAllBtn.innerHTML = '? 打包中...';
+            this.downloadAllBtn.innerHTML = ' 打包中...';
             this.downloadAllBtn.disabled = true;
 
             if (this.imageDataUrls.length === 1) {
@@ -540,7 +540,9 @@ const convertModule = {
                 const link = document.createElement('a');
                 link.download = this.file.name.replace('.pdf', '_page1.png');
                 link.href = this.imageDataUrls[0];
+                document.body.appendChild(link);
                 link.click();
+                document.body.removeChild(link);
             } else {
                 // 多张打包 ZIP
                 const zip = new JSZip();
@@ -552,7 +554,9 @@ const convertModule = {
                 const link = document.createElement('a');
                 link.download = this.file.name.replace('.pdf', '_images.zip');
                 link.href = URL.createObjectURL(zipBlob);
+                document.body.appendChild(link);
                 link.click();
+                document.body.removeChild(link);
             }
 
             this.downloadAllBtn.innerHTML = downloadingText;
@@ -776,7 +780,9 @@ const imageConvertModule = {
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         link.download = filename;
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
     },
 
     async downloadAll() {

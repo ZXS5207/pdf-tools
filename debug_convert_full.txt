@@ -1,0 +1,26 @@
+async downloadAll() {
+        if (this.imageDataUrls.length === 0) return;
+
+        try {
+            let downloadingText = this.downloadAllBtn.innerHTML;
+            this.downloadAllBtn.innerHTML = ' 打包中...';
+            this.downloadAllBtn.disabled = true;
+
+            if (this.imageDataUrls.length === 1) {
+                // 单张直接下载
+                const link = document.createElement('a');
+                link.download = this.file.name.replace('.pdf', '_page1.png');
+                link.href = this.imageDataUrls[0];
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                // 多张打包 ZIP
+                const zip = new JSZip();
+                for (let i = 0; i < this.imageDataUrls.length; i++) {
+                    const base64 = this.imageDataUrls[i].split(',')[1];
+                    zip.file(`${this.file.name.replace('.pdf', '')}_page${i + 1}.png`, base64, { base64: true });
+                }
+                const zipBlob = await zip.generateAsync({ type: 'blob' });
+                const link = document.createElement('a');
+                link.download = this.file.name.repl
